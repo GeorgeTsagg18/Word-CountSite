@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WordCounters.Studio | Pro Writing Tool & Word Counter</title>
+    <meta name="description" content="Use wordcounters.studio to count words, optimize for social media limits, and write distraction-free with Focus Mode.">
+    
+	<!-- International SEO hreflang tags -->
+    <link rel="alternate" hreflang="en" href="https://wordcounters.studio/" />
+    <link rel="alternate" hreflang="de" href="https://wordcounters.studio/de.html" />
+    <link rel="alternate" hreflang="x-default" href="https://wordcounters.studio/" />
+	
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config for Dark Mode -->
+    <script>
+        tailwind.config = { darkMode: 'class', }
+    </script>
+    
+    <!-- Prevent FOUC -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        textarea { resize: vertical; }
+        textarea:focus { outline: none; }
+        
+        /* Focus Mode Styles */
+        body.focus-active nav,
+        body.focus-active footer,
+        body.focus-active #rightColumn,
+        body.focus-active #seoSection { display: none !important; }
+        
+        body.focus-active #mainContainer { max-width: 900px; margin: 0 auto; padding-top: 2rem; }
+        body.focus-active #leftColumn { width: 100% !important; }
+        body.focus-active #textInput { height: 75vh; }
+        
+        #exitFocusBtn { display: none; }
+        body.focus-active #exitFocusBtn { display: flex; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 transition-colors duration-200">
+
+    <!-- Floating Exit Focus Button -->
+    <button id="exitFocusBtn" onclick="toggleFocus()" class="fixed top-6 right-6 z-50 bg-slate-800 dark:bg-slate-100 text-white dark:text-slate-900 px-5 py-2.5 rounded-full shadow-2xl items-center gap-2 font-medium hover:scale-105 transition-transform">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+        </svg>
+        Exit Focus Mode
+    </button>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-slate-800 shadow-sm border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40 transition-colors duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="font-bold text-2xl text-blue-600 dark:text-blue-400">wordcounters.studio</span>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <div class="hidden md:flex space-x-6">
+                        <a href="#" class="text-slate-600 dark:text-slate-300 hover:text-blue-600 font-medium transition">Home</a>
+                        <a href="#about" class="text-slate-600 dark:text-slate-300 hover:text-blue-600 font-medium transition">About</a>
+                    </div>
+                    
+					<!-- Language Selector -->
+                    <div class="relative group">
+                        <button class="flex items-center gap-1 p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors font-medium text-sm focus:outline-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            EN
+                        </button>
+                        <!-- Dropdown -->
+                        <div class="absolute right-0 mt-2 w-32 bg-white dark:bg-slate-800 rounded-md shadow-lg border border-slate-200 dark:border-slate-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <a href="index.html" class="block px-4 py-2 text-sm text-blue-600 dark:text-blue-400 font-semibold bg-slate-50 dark:bg-slate-700/50">🇺🇸 English</a>
+                            <a href="de.html" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">🇩🇪 Deutsch</a>
+                        </div>
+                    </div>
+					
+                    <!-- Dark Mode Toggle -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors focus:outline-none">
+                        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Tool Section -->
+    <main id="mainContainer" class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 transition-all duration-300">
+        <div class="flex flex-col lg:flex-row gap-8">
+            
+            <!-- Left Column: The Editor -->
+            <div id="leftColumn" class="w-full lg:w-3/4 flex flex-col gap-4 transition-all duration-300">
+                
+                <!-- Metrics Bar -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-2">
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center">
+                        <span class="block text-3xl font-bold text-blue-600 dark:text-blue-400" id="wordCount">0</span>
+                        <span class="text-xs text-slate-500 uppercase tracking-wide">Words</span>
+                    </div>
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center">
+                        <span class="block text-3xl font-bold text-blue-600 dark:text-blue-400" id="charCount">0</span>
+                        <span class="text-xs text-slate-500 uppercase tracking-wide">Characters</span>
+                    </div>
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center">
+                        <span class="block text-3xl font-bold text-blue-600 dark:text-blue-400" id="sentenceCount">0</span>
+                        <span class="text-xs text-slate-500 uppercase tracking-wide">Sentences</span>
+                    </div>
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center">
+                        <span class="block text-3xl font-bold text-blue-600 dark:text-blue-400" id="paragraphCount">0</span>
+                        <span class="text-xs text-slate-500 uppercase tracking-wide">Paragraphs</span>
+                    </div>
+                </div>
+
+                <!-- Toolbar (Updated with Text Cleaners & Focus Mode) -->
+                <div class="bg-white dark:bg-slate-800 px-4 py-3 rounded-t-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-wrap gap-3 items-center border-b-0">
+                    
+                    <!-- Text Formatting -->
+                    <div class="flex space-x-1 border-r border-slate-200 dark:border-slate-600 pr-3">
+                        <button onclick="changeCase('upper')" title="UPPERCASE" class="p-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded transition-colors text-sm font-medium">AA</button>
+                        <button onclick="changeCase('lower')" title="lowercase" class="p-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded transition-colors text-sm font-medium">aa</button>
+                        <button onclick="changeCase('title')" title="Title Case" class="p-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded transition-colors text-sm font-medium">Aa</button>
+                    </div>
+
+                    <!-- Text Cleaning -->
+                    <div class="flex space-x-2 border-r border-slate-200 dark:border-slate-600 pr-3">
+                        <button onclick="cleanText('spaces')" class="px-2 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 text-indigo-700 dark:text-indigo-300 text-xs rounded transition-colors font-medium flex items-center gap-1">
+                            Remove Extra Spaces
+                        </button>
+                        <button onclick="cleanText('breaks')" class="px-2 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 text-indigo-700 dark:text-indigo-300 text-xs rounded transition-colors font-medium flex items-center gap-1">
+                            Remove Line Breaks
+                        </button>
+                    </div>
+
+                    <!-- Right Side Actions -->
+                    <div class="ml-auto flex space-x-2">
+                        <button onclick="toggleFocus()" class="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/30 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-400 text-sm rounded-md transition-colors font-medium flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
+                            Zen Mode
+                        </button>
+                        <button onclick="clearText()" class="px-3 py-1.5 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 text-red-600 dark:text-red-400 text-sm rounded-md transition-colors font-medium">Clear</button>
+                    </div>
+                </div>
+
+                <!-- Text Area -->
+                <textarea id="textInput" class="w-full h-96 p-6 rounded-b-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm text-lg text-slate-700 dark:text-slate-200 leading-relaxed transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10" placeholder="Start typing or paste your text here..."></textarea>
+                <div class="text-right text-xs text-slate-400 mt-1" id="saveStatus">Changes auto-saved locally</div>
+            </div>
+
+            <!-- Right Column: Details -->
+            <div id="rightColumn" class="w-full lg:w-1/4 flex flex-col gap-6 transition-all duration-300">
+                
+                <!-- Social Media Limits -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                    <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-700 pb-2">Social Limits</h3>
+                    
+                    <!-- X / Twitter Bar -->
+                    <div class="mb-5">
+                        <div class="flex justify-between text-xs mb-1.5">
+                            <span class="font-medium text-slate-600 dark:text-slate-400">X (Twitter)</span>
+                            <span id="twitterText" class="font-bold text-slate-500 dark:text-slate-400">0 / 280</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
+                            <div id="twitterBar" class="bg-[#1DA1F2] h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- LinkedIn Bar -->
+                    <div>
+                        <div class="flex justify-between text-xs mb-1.5">
+                            <span class="font-medium text-slate-600 dark:text-slate-400">LinkedIn Post</span>
+                            <span id="linkedinText" class="font-bold text-slate-500 dark:text-slate-400">0 / 3000</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
+                            <div id="linkedinBar" class="bg-[#0A66C2] h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Keyword Density -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                    <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-700 pb-2">Keyword Density</h3>
+                    <ul id="keywordList" class="space-y-3 text-sm">
+                        <li class="text-slate-500 italic">Start typing to see density...</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- SEO Content & FAQ Section -->
+    <section id="about" class="bg-white dark:bg-slate-900 py-16 border-t border-slate-200 dark:border-slate-800 mt-12 transition-colors">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-slate-600 dark:text-slate-400 leading-relaxed space-y-8">
+            
+            <h2 class="text-3xl font-bold text-slate-800 dark:text-slate-200 mb-6">The Ultimate Free Word Counter & Text Editor</h2>
+            <p>Whether you are a student aiming for a specific essay length, an SEO professional optimizing a blog post, or a freelancer drafting client work, knowing the exact length of your writing is essential. If you are wondering <strong>how to count words in text</strong> without relying on clunky desktop software, our tool provides an instant solution. Simply paste your document into the editor above to <strong>count words</strong>, characters, and sentences in real time.</p>
+            
+            <p>When you check your <strong>word count online</strong>, privacy is a top priority. Our <strong>word counter</strong> runs entirely in your web browser, meaning your private documents and ideas are never uploaded to any external servers. Your work is safe, secure, and auto-saved locally so you never lose your progress.</p>
+
+            <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 mt-10">Built-in Word Limit Counter for Creators</h2>
+            <p>Every platform has its own strict rules. That is why we designed this tool to do much more than a standard text editor. It functions as a highly accurate <strong>word limit counter</strong> and a dedicated <strong>social media limit counter</strong>. With live progress bars for platforms like X (Twitter) and LinkedIn, you can easily draft your posts and guarantee they fit perfectly before you hit publish. No more guessing or editing on the fly!</p>
+
+            <h2 id="faq" class="text-3xl font-bold text-slate-800 dark:text-slate-200 pt-10 border-t border-slate-200 dark:border-slate-800">Frequently Asked Questions</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Why use a dedicated word counter online?</h4>
+                    <p class="mt-2">While traditional word processors can <strong>count words</strong>, a dedicated web tool offers advanced features you won't find anywhere else. From tracking keyword density to calculating reading and speaking times, it is built specifically to improve the flow and SEO value of your content instantly.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">How do I clean up messy text?</h4>
+                    <p class="mt-2">If you have ever copied text from a PDF, you know it often comes with broken lines and awkward spacing. Just paste it into the editor and use our one-click "Remove Extra Spaces" and "Remove Line Breaks" buttons to instantly format your document and make it readable.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Is the social media limit counter accurate?</h4>
+                    <p class="mt-2">Yes. We track the character limits exactly as major platforms do. The live progress bars turn red the moment you exceed the limit, ensuring your carefully crafted captions never get cut off mid-sentence.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">What is Zen Mode?</h4>
+                    <p class="mt-2">Writing requires focus. Zen Mode provides a completely distraction-free environment by hiding all menus, sidebars, and metrics, leaving only your text on the screen. It is perfect for getting your initial thoughts down before you start editing.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 text-center text-sm">
+            <p>&copy; 2026 wordcounters.studio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Core Logic (JavaScript) -->
+    <script>
+        // --- Dark Mode Logic ---
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+
+        function updateThemeIcons() {
+            if (document.documentElement.classList.contains('dark')) {
+                sunIcon.classList.remove('hidden'); moonIcon.classList.add('hidden');
+            } else {
+                sunIcon.classList.add('hidden'); moonIcon.classList.remove('hidden');
+            }
+        }
+        updateThemeIcons();
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            updateThemeIcons();
+        }
+
+        // --- Focus Mode Logic ---
+        function toggleFocus() {
+            document.body.classList.toggle('focus-active');
+            // Small delay to recalculate layout if needed
+            setTimeout(() => { textInput.focus(); }, 50);
+        }
+
+        // --- Text Editor Logic ---
+        const textInput = document.getElementById('textInput');
+        const saveStatus = document.getElementById('saveStatus');
+
+        // Load saved text
+        if(localStorage.getItem('savedText')) {
+            textInput.value = localStorage.getItem('savedText');
+            analyzeText();
+        }
+
+        textInput.addEventListener('input', () => {
+            analyzeText();
+            localStorage.setItem('savedText', textInput.value);
+            saveStatus.innerText = "Saving...";
+            setTimeout(() => saveStatus.innerText = "Changes auto-saved locally", 1000);
+        });
+
+        // --- Text Cleaners ---
+        function cleanText(action) {
+            if (action === 'spaces') {
+                // Replaces multiple spaces/tabs with a single space
+                textInput.value = textInput.value.replace(/[ \t]+/g, ' ');
+            } else if (action === 'breaks') {
+                // Replaces multiple newlines with a single space
+                textInput.value = textInput.value.replace(/[\r\n]+/g, ' ');
+            }
+            analyzeText();
+            localStorage.setItem('savedText', textInput.value);
+        }
+
+        function analyzeText() {
+            const text = textInput.value;
+            const textTrimmed = text.trim();
+            const charLen = text.length;
+            
+            // Characters Update
+            document.getElementById('charCount').innerText = charLen;
+
+            // Update Social Bars
+            updateSocialBars(charLen);
+
+            if (textTrimmed.length === 0) {
+                document.getElementById('wordCount').innerText = '0';
+                document.getElementById('sentenceCount').innerText = '0';
+                document.getElementById('paragraphCount').innerText = '0';
+                document.getElementById('keywordList').innerHTML = '<li class="text-slate-500 dark:text-slate-400 italic">Start typing to see density...</li>';
+                return;
+            }
+
+            // Words
+            const words = textTrimmed.replace(/\s+/g, ' ').split(' ').filter(w => w.length > 0);
+            const numWords = words.length;
+            document.getElementById('wordCount').innerText = numWords;
+
+            // Sentences
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            document.getElementById('sentenceCount').innerText = sentences.length;
+
+            // Paragraphs
+            const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0);
+            document.getElementById('paragraphCount').innerText = paragraphs.length;
+
+            calculateKeywordDensity(words, numWords);
+        }
+
+        function updateSocialBars(charCount) {
+            // Twitter logic
+            const twLimit = 280;
+            const twPct = Math.min((charCount / twLimit) * 100, 100);
+            const twBar = document.getElementById('twitterBar');
+            const twText = document.getElementById('twitterText');
+            
+            twBar.style.width = twPct + '%';
+            twText.innerText = `${charCount} / ${twLimit}`;
+            
+            if (charCount > twLimit) {
+                twBar.classList.replace('bg-[#1DA1F2]', 'bg-red-500');
+                twText.classList.add('text-red-500');
+            } else {
+                twBar.classList.replace('bg-red-500', 'bg-[#1DA1F2]');
+                twText.classList.remove('text-red-500');
+            }
+
+            // LinkedIn logic
+            const liLimit = 3000;
+            const liPct = Math.min((charCount / liLimit) * 100, 100);
+            const liBar = document.getElementById('linkedinBar');
+            const liText = document.getElementById('linkedinText');
+            
+            liBar.style.width = liPct + '%';
+            liText.innerText = `${charCount} / ${liLimit}`;
+            
+            if (charCount > liLimit) {
+                liBar.classList.replace('bg-[#0A66C2]', 'bg-red-500');
+                liText.classList.add('text-red-500');
+            } else {
+                liBar.classList.replace('bg-red-500', 'bg-[#0A66C2]');
+                liText.classList.remove('text-red-500');
+            }
+        }
+
+        function calculateKeywordDensity(words, totalWords) {
+            const stopWords = ['the','and','a','to','of','in','i','is','that','it','on','you','this','for','but','with','are','have','be','at','or','as','was','so','if','out','not'];
+            const wordCounts = {};
+
+            words.forEach(word => {
+                let cleanWord = word.toLowerCase().replace(/[^a-z0-9\u0370-\u03ff\u1f00-\u1fff]/g, '');
+                if (cleanWord.length > 2 && !stopWords.includes(cleanWord)) {
+                    wordCounts[cleanWord] = (wordCounts[cleanWord] || 0) + 1;
+                }
+            });
+
+            const sortedWords = Object.keys(wordCounts).sort((a, b) => wordCounts[b] - wordCounts[a]).slice(0, 5);
+            const kwList = document.getElementById('keywordList');
+            
+            kwList.innerHTML = '';
+            if (sortedWords.length === 0) {
+                kwList.innerHTML = '<li class="text-slate-500 dark:text-slate-400 italic">Not enough text...</li>';
+                return;
+            }
+
+            sortedWords.forEach(word => {
+                const count = wordCounts[word];
+                const percentage = ((count / totalWords) * 100).toFixed(1);
+                kwList.innerHTML += `
+                    <li class="flex justify-between items-center">
+                        <span class="font-medium text-slate-700 dark:text-slate-300">${word}</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded-md text-slate-600 dark:text-slate-300">${count}x</span>
+                            <span class="text-xs font-semibold text-blue-600 dark:text-blue-400">${percentage}%</span>
+                        </div>
+                    </li>
+                `;
+            });
+        }
+
+        function clearText() {
+            if(confirm("Are you sure you want to clear all text?")) {
+                textInput.value = '';
+                analyzeText();
+                localStorage.removeItem('savedText');
+            }
+        }
+
+        function changeCase(type) {
+            if(type === 'upper') {
+                textInput.value = textInput.value.toUpperCase();
+            } else if(type === 'lower') {
+                textInput.value = textInput.value.toLowerCase();
+            } else if(type === 'title') {
+                textInput.value = textInput.value.toLowerCase().split(' ').map(word => {
+                    return (word.charAt(0).toUpperCase() + word.slice(1));
+                }).join(' ');
+            }
+            analyzeText();
+            localStorage.setItem('savedText', textInput.value);
+        }
+    </script>
+</body>
+</html>
