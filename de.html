@@ -157,7 +157,7 @@
                 <div class="text-right text-xs text-slate-400 mt-1" id="saveStatus">Änderungen lokal gespeichert</div>
             </div>
 
-            <!-- Right Column: Details (Now with Sticky feature!) -->
+            <!-- Right Column: Details (Sticky feature) -->
             <div id="rightColumn" class="w-full lg:w-1/4 flex flex-col gap-6 transition-all duration-300 lg:sticky lg:top-24 lg:self-start">
                 
                 <!-- Time Estimates -->
@@ -325,10 +325,39 @@
         function acceptCookies() { localStorage.setItem('cookiesAccepted', 'true'); document.getElementById('cookieBanner').classList.add('hidden'); }
     </script>
 
+    <!-- Toast Notifications Container -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-[60] flex flex-col gap-3 pointer-events-none"></div>
+
     <!-- Core Logic (JavaScript) -->
     <script>
+        // --- Toasts Logic (New!) ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            const bgClass = type === 'success' ? 'bg-emerald-500 dark:bg-emerald-600' : 'bg-slate-800 dark:bg-slate-700';
+            
+            toast.className = `transform transition-all duration-300 translate-y-8 opacity-0 flex items-center gap-2 px-4 py-3 rounded-lg shadow-xl text-white text-sm font-medium ${bgClass} pointer-events-auto`;
+            toast.innerHTML = message;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-8', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-8', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // --- Dark Mode Logic ---
         const sunIcon = document.getElementById('sunIcon');
         const moonIcon = document.getElementById('moonIcon');
+
         function updateThemeIcons() {
             if (document.documentElement.classList.contains('dark')) {
                 sunIcon.classList.remove('hidden'); moonIcon.classList.add('hidden');
@@ -349,11 +378,13 @@
             updateThemeIcons();
         }
 
+        // --- Focus Mode Logic ---
         function toggleFocus() {
             document.body.classList.toggle('focus-active');
             setTimeout(() => { textInput.focus(); }, 50);
         }
 
+        // --- Text Editor Logic ---
         const textInput = document.getElementById('textInput');
         const saveStatus = document.getElementById('saveStatus');
 
@@ -369,6 +400,7 @@
             setTimeout(() => saveStatus.innerText = "Änderungen lokal gespeichert", 1000);
         });
 
+        // --- Text Cleaners ---
         function cleanText(action) {
             if (action === 'spaces') {
                 textInput.value = textInput.value.replace(/[ \t]+/g, ' ');
@@ -414,6 +446,7 @@
         }
 
         function updateSocialBars(charCount) {
+            // Twitter
             const twLimit = 280;
             const twPct = Math.min((charCount / twLimit) * 100, 100);
             const twBar = document.getElementById('twitterBar');
@@ -426,6 +459,7 @@
                 twBar.classList.replace('bg-red-500', 'bg-[#1DA1F2]'); twText.classList.remove('text-red-500');
             }
 
+            // LinkedIn
             const liLimit = 3000;
             const liPct = Math.min((charCount / liLimit) * 100, 100);
             const liBar = document.getElementById('linkedinBar');
@@ -540,6 +574,7 @@
                 textInput.value = '';
                 analyzeText();
                 localStorage.removeItem('savedTextDE');
+                showToast('🗑️ Text gelöscht!', 'neutral');
             }
         }
 		
@@ -560,6 +595,8 @@
             
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            
+            showToast('✅ Datei erfolgreich heruntergeladen!', 'success');
         }
 		
 		function copyToClipboard() {
@@ -567,13 +604,7 @@
             if (!textToCopy) return;
             
             navigator.clipboard.writeText(textToCopy).then(() => {
-                const btnText = document.getElementById('copyBtnText');
-                const originalText = btnText.innerText;
-                btnText.innerText = "Kopiert!"; 
-                
-                setTimeout(() => {
-                    btnText.innerText = originalText;
-                }, 2000);
+                showToast('📋 Text in die Zwischenablage kopiert!', 'success');
             });
         }
 
