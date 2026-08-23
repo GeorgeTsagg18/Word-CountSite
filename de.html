@@ -114,6 +114,13 @@
                             Umbrüche entfernen
                         </button>
                     </div>
+					<!-- Right Side Actions -->
+                    <div class="ml-auto flex space-x-2">
+                        <!-- Download Button -->
+                        <button onclick="downloadText()" title="Download as .txt" class="px-3 py-1.5 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 text-purple-700 dark:text-purple-400 text-sm rounded-md transition-colors font-medium flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                            <span class="hidden sm:inline">Speichern</span>
+                        </button>
                     <div class="ml-auto flex space-x-2">
                         <button id="copyBtn" onclick="copyToClipboard()" class="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 text-blue-700 dark:text-blue-400 text-sm rounded-md transition-colors font-medium flex items-center gap-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
@@ -441,6 +448,29 @@
                 analyzeText();
                 localStorage.removeItem('savedTextDE');
             }
+        }
+		
+		function downloadText() {
+            const textToSave = textInput.value;
+            // Αν το πλαίσιο είναι άδειο, δεν κάνει τίποτα
+            if (!textToSave) return; 
+            
+            // Δημιουργία του αρχείου κειμένου στη μνήμη του browser
+            const blob = new Blob([textToSave], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            
+            // Ένας αόρατος "σύνδεσμος" που πατιέται αυτόματα
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "CharacterCap_Document.txt";
+            a.style.display = 'none';
+            
+            document.body.appendChild(a);
+            a.click();
+            
+            // Καθαρισμός για να μην βαραίνει η μνήμη
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 		
 		function copyToClipboard() {
