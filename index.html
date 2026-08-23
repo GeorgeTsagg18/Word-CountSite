@@ -151,7 +151,7 @@
                     </div>
                 </div>
 
-                <!-- Toolbar (Updated with Text Cleaners & Focus Mode) -->
+                <!-- Toolbar -->
                 <div class="bg-white dark:bg-slate-800 px-4 py-3 rounded-t-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-wrap gap-3 items-center border-b-0">
                     
                     <!-- Text Formatting -->
@@ -178,7 +178,6 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                             <span class="hidden sm:inline">Download</span>
                         </button>
-                    <div class="ml-auto flex space-x-2">
                         <button id="copyBtn" onclick="copyToClipboard()" class="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 text-blue-700 dark:text-blue-400 text-sm rounded-md transition-colors font-medium flex items-center gap-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
                             <span id="copyBtnText">Copy</span>
@@ -196,14 +195,13 @@
                 <div class="text-right text-xs text-slate-400 mt-1" id="saveStatus">Changes auto-saved locally</div>
             </div>
 
-            <!-- Right Column: Details -->
-            <div id="rightColumn" class="w-full lg:w-1/4 flex flex-col gap-6 transition-all duration-300">
+            <!-- Right Column: Details (Now with Sticky feature!) -->
+            <div id="rightColumn" class="w-full lg:w-1/4 flex flex-col gap-6 transition-all duration-300 lg:sticky lg:top-24 lg:self-start">
                 
                 <!-- Social Media Limits -->
                 <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
                     <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-700 pb-2">Social Limits</h3>
                     
-                    <!-- X / Twitter Bar -->
                     <div class="mb-5">
                         <div class="flex justify-between text-xs mb-1.5">
                             <span class="font-medium text-slate-600 dark:text-slate-400">X (Twitter)</span>
@@ -214,7 +212,6 @@
                         </div>
                     </div>
 
-                    <!-- LinkedIn Bar -->
                     <div>
                         <div class="flex justify-between text-xs mb-1.5">
                             <span class="font-medium text-slate-600 dark:text-slate-400">LinkedIn Post</span>
@@ -225,7 +222,6 @@
                         </div>
                     </div>
 					
-					<!-- Instagram Bar -->
                     <div class="mt-5">
                         <div class="flex justify-between text-xs mb-1.5">
                             <span class="font-medium text-slate-600 dark:text-slate-400">Instagram</span>
@@ -236,7 +232,6 @@
                         </div>
                     </div>
 
-                    <!-- TikTok Bar -->
                     <div class="mt-5">
                         <div class="flex justify-between text-xs mb-1.5">
                             <span class="font-medium text-slate-600 dark:text-slate-400">TikTok</span>
@@ -246,7 +241,31 @@
                             <div id="tiktokBar" class="bg-[#FE2C55] h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
                         </div>
                     </div>
-					
+                </div>
+
+                <!-- SEO Limits -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                    <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-700 pb-2">SEO Limits</h3>
+                    
+                    <div class="mb-5">
+                        <div class="flex justify-between text-xs mb-1.5">
+                            <span class="font-medium text-slate-600 dark:text-slate-400">Meta Title</span>
+                            <span id="titleText" class="font-bold text-slate-500 dark:text-slate-400">0 / 60</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
+                            <div id="titleBar" class="bg-[#4285F4] h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-xs mb-1.5">
+                            <span class="font-medium text-slate-600 dark:text-slate-400">Meta Description</span>
+                            <span id="descText" class="font-bold text-slate-500 dark:text-slate-400">0 / 160</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
+                            <div id="descBar" class="bg-[#34A853] h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Keyword Density -->
@@ -365,7 +384,6 @@
         // --- Focus Mode Logic ---
         function toggleFocus() {
             document.body.classList.toggle('focus-active');
-            // Small delay to recalculate layout if needed
             setTimeout(() => { textInput.focus(); }, 50);
         }
 
@@ -373,7 +391,6 @@
         const textInput = document.getElementById('textInput');
         const saveStatus = document.getElementById('saveStatus');
 
-        // Load saved text
         if(localStorage.getItem('savedText')) {
             textInput.value = localStorage.getItem('savedText');
             analyzeText();
@@ -389,10 +406,8 @@
         // --- Text Cleaners ---
         function cleanText(action) {
             if (action === 'spaces') {
-                // Replaces multiple spaces/tabs with a single space
                 textInput.value = textInput.value.replace(/[ \t]+/g, ' ');
             } else if (action === 'breaks') {
-                // Replaces multiple newlines with a single space
                 textInput.value = textInput.value.replace(/[\r\n]+/g, ' ');
             }
             analyzeText();
@@ -404,10 +419,7 @@
             const textTrimmed = text.trim();
             const charLen = text.length;
             
-            // Characters Update
             document.getElementById('charCount').innerText = charLen;
-
-            // Update Social Bars
             updateSocialBars(charLen);
 
             if (textTrimmed.length === 0) {
@@ -418,16 +430,13 @@
                 return;
             }
 
-            // Words
             const words = textTrimmed.replace(/\s+/g, ' ').split(' ').filter(w => w.length > 0);
             const numWords = words.length;
             document.getElementById('wordCount').innerText = numWords;
 
-            // Sentences
             const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
             document.getElementById('sentenceCount').innerText = sentences.length;
 
-            // Paragraphs
             const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0);
             document.getElementById('paragraphCount').innerText = paragraphs.length;
 
@@ -443,13 +452,10 @@
             
             twBar.style.width = twPct + '%';
             twText.innerText = `${charCount} / ${twLimit}`;
-            
             if (charCount > twLimit) {
-                twBar.classList.replace('bg-[#1DA1F2]', 'bg-red-500');
-                twText.classList.add('text-red-500');
+                twBar.classList.replace('bg-[#1DA1F2]', 'bg-red-500'); twText.classList.add('text-red-500');
             } else {
-                twBar.classList.replace('bg-red-500', 'bg-[#1DA1F2]');
-                twText.classList.remove('text-red-500');
+                twBar.classList.replace('bg-red-500', 'bg-[#1DA1F2]'); twText.classList.remove('text-red-500');
             }
 
             // LinkedIn logic
@@ -460,13 +466,10 @@
             
             liBar.style.width = liPct + '%';
             liText.innerText = `${charCount} / ${liLimit}`;
-            
             if (charCount > liLimit) {
-                liBar.classList.replace('bg-[#0A66C2]', 'bg-red-500');
-                liText.classList.add('text-red-500');
+                liBar.classList.replace('bg-[#0A66C2]', 'bg-red-500'); liText.classList.add('text-red-500');
             } else {
-                liBar.classList.replace('bg-red-500', 'bg-[#0A66C2]');
-                liText.classList.remove('text-red-500');
+                liBar.classList.replace('bg-red-500', 'bg-[#0A66C2]'); liText.classList.remove('text-red-500');
             }
 			
 			// Instagram logic
@@ -477,7 +480,6 @@
             
             igBar.style.width = igPct + '%';
             igText.innerText = `${charCount} / ${igLimit}`;
-            
             if (charCount > igLimit) {
                 igBar.classList.replace('bg-[#E1306C]', 'bg-red-500'); igText.classList.add('text-red-500');
             } else {
@@ -492,11 +494,40 @@
             
             ttBar.style.width = ttPct + '%';
             ttText.innerText = `${charCount} / ${ttLimit}`;
-            
             if (charCount > ttLimit) {
                 ttBar.classList.replace('bg-[#FE2C55]', 'bg-red-500'); ttText.classList.add('text-red-500');
             } else {
                 ttBar.classList.replace('bg-red-500', 'bg-[#FE2C55]'); ttText.classList.remove('text-red-500');
+            }
+
+            // SEO Meta Title logic
+            const titleLimit = 60;
+            const titlePct = Math.min((charCount / titleLimit) * 100, 100);
+            const titleBar = document.getElementById('titleBar');
+            const titleText = document.getElementById('titleText');
+            
+            titleBar.style.width = titlePct + '%';
+            titleText.innerText = `${charCount} / ${titleLimit}`;
+            
+            if (charCount > titleLimit) {
+                titleBar.classList.replace('bg-[#4285F4]', 'bg-red-500'); titleText.classList.add('text-red-500');
+            } else {
+                titleBar.classList.replace('bg-red-500', 'bg-[#4285F4]'); titleText.classList.remove('text-red-500');
+            }
+
+            // SEO Meta Description logic
+            const descLimit = 160;
+            const descPct = Math.min((charCount / descLimit) * 100, 100);
+            const descBar = document.getElementById('descBar');
+            const descText = document.getElementById('descText');
+            
+            descBar.style.width = descPct + '%';
+            descText.innerText = `${charCount} / ${descLimit}`;
+            
+            if (charCount > descLimit) {
+                descBar.classList.replace('bg-[#34A853]', 'bg-red-500'); descText.classList.add('text-red-500');
+            } else {
+                descBar.classList.replace('bg-red-500', 'bg-[#34A853]'); descText.classList.remove('text-red-500');
             }
         }
 
@@ -545,14 +576,11 @@
 		
 		function downloadText() {
             const textToSave = textInput.value;
-            // Αν το πλαίσιο είναι άδειο, δεν κάνει τίποτα
             if (!textToSave) return; 
             
-            // Δημιουργία του αρχείου κειμένου στη μνήμη του browser
             const blob = new Blob([textToSave], { type: "text/plain;charset=utf-8" });
             const url = URL.createObjectURL(blob);
             
-            // Ένας αόρατος "σύνδεσμος" που πατιέται αυτόματα
             const a = document.createElement('a');
             a.href = url;
             a.download = "CharacterCap_Document.txt";
@@ -561,7 +589,6 @@
             document.body.appendChild(a);
             a.click();
             
-            // Καθαρισμός για να μην βαραίνει η μνήμη
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
