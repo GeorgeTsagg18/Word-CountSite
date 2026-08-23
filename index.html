@@ -406,8 +406,10 @@
         // --- Text Cleaners ---
         function cleanText(action) {
             if (action === 'spaces') {
+                // Replaces multiple spaces/tabs with a single space
                 textInput.value = textInput.value.replace(/[ \t]+/g, ' ');
             } else if (action === 'breaks') {
+                // Replaces multiple newlines with a single space
                 textInput.value = textInput.value.replace(/[\r\n]+/g, ' ');
             }
             analyzeText();
@@ -419,7 +421,10 @@
             const textTrimmed = text.trim();
             const charLen = text.length;
             
+            // Characters Update
             document.getElementById('charCount').innerText = charLen;
+
+            // Update Social Bars
             updateSocialBars(charLen);
 
             if (textTrimmed.length === 0) {
@@ -430,13 +435,16 @@
                 return;
             }
 
+            // Words
             const words = textTrimmed.replace(/\s+/g, ' ').split(' ').filter(w => w.length > 0);
             const numWords = words.length;
             document.getElementById('wordCount').innerText = numWords;
 
+            // Sentences
             const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
             document.getElementById('sentenceCount').innerText = sentences.length;
 
+            // Paragraphs
             const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0);
             document.getElementById('paragraphCount').innerText = paragraphs.length;
 
@@ -555,9 +563,9 @@
                 const count = wordCounts[word];
                 const percentage = ((count / totalWords) * 100).toFixed(1);
                 kwList.innerHTML += `
-                    <li class="flex justify-between items-center">
-                        <span class="font-medium text-slate-700 dark:text-slate-300">${word}</span>
-                        <div class="flex items-center gap-2">
+                    <li class="flex justify-between items-center gap-2">
+                        <span class="font-medium text-slate-700 dark:text-slate-300 truncate flex-1" title="${word}">${word}</span>
+                        <div class="flex items-center gap-2 flex-shrink-0">
                             <span class="text-xs px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded-md text-slate-600 dark:text-slate-300">${count}x</span>
                             <span class="text-xs font-semibold text-blue-600 dark:text-blue-400">${percentage}%</span>
                         </div>
