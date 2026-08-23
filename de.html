@@ -114,11 +114,15 @@
                         </button>
                     </div>
                     <div class="ml-auto flex space-x-2">
+                        <button id="copyBtn" onclick="copyToClipboard()" class="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 text-blue-700 dark:text-blue-400 text-sm rounded-md transition-colors font-medium flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+                            <span id="copyBtnText">Kopieren</span>
+                        </button>
                         <button onclick="toggleFocus()" class="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/30 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-400 text-sm rounded-md transition-colors font-medium flex items-center gap-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
-                            Zen-Modus
+                            Zen Mode
                         </button>
-                        <button onclick="clearText()" class="px-3 py-1.5 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 text-red-600 dark:text-red-400 text-sm rounded-md transition-colors font-medium">Löschen</button>
+                        <button onclick="clearText()" class="px-3 py-1.5 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 text-red-600 dark:text-red-400 text-sm rounded-md transition-colors font-medium">Clear</button>
                     </div>
                 </div>
 
@@ -157,6 +161,24 @@
                         </div>
                         <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
                             <div id="linkedinBar" class="bg-[#0A66C2] h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="mt-5">
+                        <div class="flex justify-between text-xs mb-1.5">
+                            <span class="font-medium text-slate-600 dark:text-slate-400">Instagram</span>
+                            <span id="igText" class="font-bold text-slate-500 dark:text-slate-400">0 / 2200</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
+                            <div id="igBar" class="bg-[#E1306C] h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="mt-5">
+                        <div class="flex justify-between text-xs mb-1.5">
+                            <span class="font-medium text-slate-600 dark:text-slate-400">TikTok</span>
+                            <span id="tiktokText" class="font-bold text-slate-500 dark:text-slate-400">0 / 2200</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
+                            <div id="tiktokBar" class="bg-[#FE2C55] h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
@@ -343,6 +365,37 @@
             } else {
                 liBar.classList.replace('bg-red-500', 'bg-[#0A66C2]'); liText.classList.remove('text-red-500');
             }
+			
+			// Instagram logic
+            const igLimit = 2200;
+            const igPct = Math.min((charCount / igLimit) * 100, 100);
+            const igBar = document.getElementById('igBar');
+            const igText = document.getElementById('igText');
+            
+            igBar.style.width = igPct + '%';
+            igText.innerText = `${charCount} / ${igLimit}`;
+            
+            if (charCount > igLimit) {
+                igBar.classList.replace('bg-[#E1306C]', 'bg-red-500'); igText.classList.add('text-red-500');
+            } else {
+                igBar.classList.replace('bg-red-500', 'bg-[#E1306C]'); igText.classList.remove('text-red-500');
+            }
+
+            // TikTok logic
+            const ttLimit = 2200;
+            const ttPct = Math.min((charCount / ttLimit) * 100, 100);
+            const ttBar = document.getElementById('tiktokBar');
+            const ttText = document.getElementById('tiktokText');
+            
+            ttBar.style.width = ttPct + '%';
+            ttText.innerText = `${charCount} / ${ttLimit}`;
+            
+            if (charCount > ttLimit) {
+                ttBar.classList.replace('bg-[#FE2C55]', 'bg-red-500'); ttText.classList.add('text-red-500');
+            } else {
+                ttBar.classList.replace('bg-red-500', 'bg-[#FE2C55]'); ttText.classList.remove('text-red-500');
+            }
+			
         }
 
         function calculateKeywordDensity(words, totalWords) {
@@ -387,6 +440,21 @@
                 analyzeText();
                 localStorage.removeItem('savedTextDE');
             }
+        }
+		
+		function copyToClipboard() {
+            const textToCopy = textInput.value;
+            if (!textToCopy) return;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const btnText = document.getElementById('copyBtnText');
+                const originalText = btnText.innerText;
+                btnText.innerText = "Kopiert!"; //
+                
+                setTimeout(() => {
+                    btnText.innerText = originalText;
+                }, 2000);
+            });
         }
 
         function changeCase(type) {
