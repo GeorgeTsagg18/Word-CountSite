@@ -52,8 +52,7 @@
         body.focus-active #exitFocusBtn { display: flex; }
     </style>
 	
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7718845939103070"
-     crossorigin="anonymous"></script>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7718845939103070" crossorigin="anonymous"></script>
 	 
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 transition-colors duration-200">
@@ -119,7 +118,18 @@
                 </div>
 
                 <!-- Toolbar -->
-                <div class="bg-white dark:bg-slate-800 px-4 py-3 rounded-t-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-wrap gap-3 items-center border-b-0">
+                <div class="bg-white dark:bg-slate-800 px-4 py-3 rounded-t-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-wrap gap-3 items-center border-b-0 overflow-x-auto">
+                    
+                    <!-- Undo / Redo -->
+                    <div class="flex space-x-1 border-r border-slate-200 dark:border-slate-600 pr-3">
+                        <button onclick="undo()" title="Rückgängig" class="p-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded transition-colors text-sm font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>
+                        </button>
+                        <button onclick="redo()" title="Wiederherstellen" class="p-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded transition-colors text-sm font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6" /></svg>
+                        </button>
+                    </div>
+
                     <div class="flex space-x-1 border-r border-slate-200 dark:border-slate-600 pr-3">
                         <button onclick="changeCase('upper')" title="GROSSBUCHSTABEN" class="p-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded transition-colors text-sm font-medium">AA</button>
                         <button onclick="changeCase('lower')" title="kleinbuchstaben" class="p-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded transition-colors text-sm font-medium">aa</button>
@@ -330,51 +340,68 @@
 
     <!-- Core Logic (JavaScript) -->
     <script>
-        // --- Toasts Logic (New!) ---
+        const textInput = document.getElementById('textInput');
+        const saveStatus = document.getElementById('saveStatus');
+
+        // --- History Logic (Undo/Redo) ---
+        let textHistory = [];
+        let historyIndex = -1;
+        let historyTimeout;
+
+        function saveHistoryState() {
+            const currentVal = textInput.value;
+            // Only save if it's different from the current state
+            if (historyIndex === -1 || textHistory[historyIndex] !== currentVal) {
+                textHistory = textHistory.slice(0, historyIndex + 1);
+                textHistory.push(currentVal);
+                if (textHistory.length > 50) textHistory.shift(); // Max 50 states
+                else historyIndex++;
+            }
+        }
+
+        function undo() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                textInput.value = textHistory[historyIndex];
+                analyzeText();
+                localStorage.setItem('savedTextDE', textInput.value);
+                showToast('↩️ Aktion rückgängig gemacht', 'neutral');
+            }
+        }
+
+        function redo() {
+            if (historyIndex < textHistory.length - 1) {
+                historyIndex++;
+                textInput.value = textHistory[historyIndex];
+                analyzeText();
+                localStorage.setItem('savedTextDE', textInput.value);
+                showToast('↪️ Aktion wiederhergestellt', 'neutral');
+            }
+        }
+
+        // --- Toasts Logic ---
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            
             const bgClass = type === 'success' ? 'bg-emerald-500 dark:bg-emerald-600' : 'bg-slate-800 dark:bg-slate-700';
-            
             toast.className = `transform transition-all duration-300 translate-y-8 opacity-0 flex items-center gap-2 px-4 py-3 rounded-lg shadow-xl text-white text-sm font-medium ${bgClass} pointer-events-auto`;
             toast.innerHTML = message;
-            
             container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.classList.remove('translate-y-8', 'opacity-0');
-                toast.classList.add('translate-y-0', 'opacity-100');
-            }, 10);
-            
-            setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-8', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => { toast.classList.remove('translate-y-8', 'opacity-0'); toast.classList.add('translate-y-0', 'opacity-100'); }, 10);
+            setTimeout(() => { toast.classList.remove('translate-y-0', 'opacity-100'); toast.classList.add('translate-y-8', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
         // --- Dark Mode Logic ---
         const sunIcon = document.getElementById('sunIcon');
         const moonIcon = document.getElementById('moonIcon');
-
         function updateThemeIcons() {
-            if (document.documentElement.classList.contains('dark')) {
-                sunIcon.classList.remove('hidden'); moonIcon.classList.add('hidden');
-            } else {
-                sunIcon.classList.add('hidden'); moonIcon.classList.remove('hidden');
-            }
+            if (document.documentElement.classList.contains('dark')) { sunIcon.classList.remove('hidden'); moonIcon.classList.add('hidden'); } 
+            else { sunIcon.classList.add('hidden'); moonIcon.classList.remove('hidden'); }
         }
         updateThemeIcons();
-
         function toggleTheme() {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
+            if (document.documentElement.classList.contains('dark')) { document.documentElement.classList.remove('dark'); localStorage.setItem('theme', 'light'); } 
+            else { document.documentElement.classList.add('dark'); localStorage.setItem('theme', 'dark'); }
             updateThemeIcons();
         }
 
@@ -384,29 +411,31 @@
             setTimeout(() => { textInput.focus(); }, 50);
         }
 
-        // --- Text Editor Logic ---
-        const textInput = document.getElementById('textInput');
-        const saveStatus = document.getElementById('saveStatus');
-
+        // --- Initialization ---
         if(localStorage.getItem('savedTextDE')) {
             textInput.value = localStorage.getItem('savedTextDE');
             analyzeText();
         }
+        saveHistoryState(); // Initial state save
 
+        // --- Event Listeners ---
         textInput.addEventListener('input', () => {
             analyzeText();
             localStorage.setItem('savedTextDE', textInput.value);
             saveStatus.innerText = "Speichern...";
             setTimeout(() => saveStatus.innerText = "Änderungen lokal gespeichert", 1000);
+            
+            // Debounce history save (saves 1 sec after typing stops)
+            clearTimeout(historyTimeout);
+            historyTimeout = setTimeout(saveHistoryState, 1000);
         });
 
         // --- Text Cleaners ---
         function cleanText(action) {
-            if (action === 'spaces') {
-                textInput.value = textInput.value.replace(/[ \t]+/g, ' ');
-            } else if (action === 'breaks') {
-                textInput.value = textInput.value.replace(/[\r\n]+/g, ' ');
-            }
+            saveHistoryState(); // Save before modification
+            if (action === 'spaces') { textInput.value = textInput.value.replace(/[ \t]+/g, ' '); } 
+            else if (action === 'breaks') { textInput.value = textInput.value.replace(/[\r\n]+/g, ' '); }
+            saveHistoryState(); // Save after modification
             analyzeText();
             localStorage.setItem('savedTextDE', textInput.value);
         }
@@ -446,95 +475,62 @@
         }
 
         function updateSocialBars(charCount) {
-            // Twitter
             const twLimit = 280;
             const twPct = Math.min((charCount / twLimit) * 100, 100);
             const twBar = document.getElementById('twitterBar');
             const twText = document.getElementById('twitterText');
             twBar.style.width = twPct + '%';
             twText.innerText = `${charCount} / ${twLimit}`;
-            if (charCount > twLimit) {
-                twBar.classList.replace('bg-[#1DA1F2]', 'bg-red-500'); twText.classList.add('text-red-500');
-            } else {
-                twBar.classList.replace('bg-red-500', 'bg-[#1DA1F2]'); twText.classList.remove('text-red-500');
-            }
+            if (charCount > twLimit) { twBar.classList.replace('bg-[#1DA1F2]', 'bg-red-500'); twText.classList.add('text-red-500'); } 
+            else { twBar.classList.replace('bg-red-500', 'bg-[#1DA1F2]'); twText.classList.remove('text-red-500'); }
 
-            // LinkedIn
             const liLimit = 3000;
             const liPct = Math.min((charCount / liLimit) * 100, 100);
             const liBar = document.getElementById('linkedinBar');
             const liText = document.getElementById('linkedinText');
             liBar.style.width = liPct + '%';
             liText.innerText = `${charCount} / ${liLimit}`;
-            if (charCount > liLimit) {
-                liBar.classList.replace('bg-[#0A66C2]', 'bg-red-500'); liText.classList.add('text-red-500');
-            } else {
-                liBar.classList.replace('bg-red-500', 'bg-[#0A66C2]'); liText.classList.remove('text-red-500');
-            }
+            if (charCount > liLimit) { liBar.classList.replace('bg-[#0A66C2]', 'bg-red-500'); liText.classList.add('text-red-500'); } 
+            else { liBar.classList.replace('bg-red-500', 'bg-[#0A66C2]'); liText.classList.remove('text-red-500'); }
 			
-			// Instagram logic
             const igLimit = 2200;
             const igPct = Math.min((charCount / igLimit) * 100, 100);
             const igBar = document.getElementById('igBar');
             const igText = document.getElementById('igText');
-            
             igBar.style.width = igPct + '%';
             igText.innerText = `${charCount} / ${igLimit}`;
-            
-            if (charCount > igLimit) {
-                igBar.classList.replace('bg-[#E1306C]', 'bg-red-500'); igText.classList.add('text-red-500');
-            } else {
-                igBar.classList.replace('bg-red-500', 'bg-[#E1306C]'); igText.classList.remove('text-red-500');
-            }
+            if (charCount > igLimit) { igBar.classList.replace('bg-[#E1306C]', 'bg-red-500'); igText.classList.add('text-red-500'); } 
+            else { igBar.classList.replace('bg-red-500', 'bg-[#E1306C]'); igText.classList.remove('text-red-500'); }
 
-            // TikTok logic
             const ttLimit = 2200;
             const ttPct = Math.min((charCount / ttLimit) * 100, 100);
             const ttBar = document.getElementById('tiktokBar');
             const ttText = document.getElementById('tiktokText');
-            
             ttBar.style.width = ttPct + '%';
             ttText.innerText = `${charCount} / ${ttLimit}`;
-            
-            if (charCount > ttLimit) {
-                ttBar.classList.replace('bg-[#FE2C55]', 'bg-red-500'); ttText.classList.add('text-red-500');
-            } else {
-                ttBar.classList.replace('bg-red-500', 'bg-[#FE2C55]'); ttText.classList.remove('text-red-500');
-            }
+            if (charCount > ttLimit) { ttBar.classList.replace('bg-[#FE2C55]', 'bg-red-500'); ttText.classList.add('text-red-500'); } 
+            else { ttBar.classList.replace('bg-red-500', 'bg-[#FE2C55]'); ttText.classList.remove('text-red-500'); }
 
-            // SEO Meta Title logic
             const titleLimit = 60;
             const titlePct = Math.min((charCount / titleLimit) * 100, 100);
             const titleBar = document.getElementById('titleBar');
             const titleText = document.getElementById('titleText');
-            
             titleBar.style.width = titlePct + '%';
             titleText.innerText = `${charCount} / ${titleLimit}`;
-            
-            if (charCount > titleLimit) {
-                titleBar.classList.replace('bg-[#4285F4]', 'bg-red-500'); titleText.classList.add('text-red-500');
-            } else {
-                titleBar.classList.replace('bg-red-500', 'bg-[#4285F4]'); titleText.classList.remove('text-red-500');
-            }
+            if (charCount > titleLimit) { titleBar.classList.replace('bg-[#4285F4]', 'bg-red-500'); titleText.classList.add('text-red-500'); } 
+            else { titleBar.classList.replace('bg-red-500', 'bg-[#4285F4]'); titleText.classList.remove('text-red-500'); }
 
-            // SEO Meta Description logic
             const descLimit = 160;
             const descPct = Math.min((charCount / descLimit) * 100, 100);
             const descBar = document.getElementById('descBar');
             const descText = document.getElementById('descText');
-            
             descBar.style.width = descPct + '%';
             descText.innerText = `${charCount} / ${descLimit}`;
-            
-            if (charCount > descLimit) {
-                descBar.classList.replace('bg-[#34A853]', 'bg-red-500'); descText.classList.add('text-red-500');
-            } else {
-                descBar.classList.replace('bg-red-500', 'bg-[#34A853]'); descText.classList.remove('text-red-500');
-            }
+            if (charCount > descLimit) { descBar.classList.replace('bg-[#34A853]', 'bg-red-500'); descText.classList.add('text-red-500'); } 
+            else { descBar.classList.replace('bg-red-500', 'bg-[#34A853]'); descText.classList.remove('text-red-500'); }
         }
 
         function calculateKeywordDensity(words, totalWords) {
-            // German stop words included for correct SEO analysis
             const stopWords = ['und','die','der','das','in','zu','den','auf','für','ist','von','mit','nicht','sich','eine','ein','auch','es','als','an','dem','aus','wie','sie','werden','dass','oder','über','um','nur'];
             const wordCounts = {};
 
@@ -571,7 +567,9 @@
 
         function clearText() {
             if(confirm("Möchten Sie den gesamten Text wirklich löschen?")) {
+                saveHistoryState(); // Save before clear
                 textInput.value = '';
+                saveHistoryState(); // Save empty state
                 analyzeText();
                 localStorage.removeItem('savedTextDE');
                 showToast('🗑️ Text gelöscht!', 'neutral');
@@ -581,43 +579,35 @@
 		function downloadText() {
             const textToSave = textInput.value;
             if (!textToSave) return; 
-            
             const blob = new Blob([textToSave], { type: "text/plain;charset=utf-8" });
             const url = URL.createObjectURL(blob);
-            
             const a = document.createElement('a');
             a.href = url;
             a.download = "CharacterCap_Document.txt";
             a.style.display = 'none';
-            
             document.body.appendChild(a);
             a.click();
-            
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
             showToast('✅ Datei erfolgreich heruntergeladen!', 'success');
         }
 		
 		function copyToClipboard() {
             const textToCopy = textInput.value;
             if (!textToCopy) return;
-            
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                showToast('📋 Text in die Zwischenablage kopiert!', 'success');
-            });
+            navigator.clipboard.writeText(textToCopy).then(() => { showToast('📋 Text in die Zwischenablage kopiert!', 'success'); });
         }
 
         function changeCase(type) {
-            if(type === 'upper') {
-                textInput.value = textInput.value.toUpperCase();
-            } else if(type === 'lower') {
-                textInput.value = textInput.value.toLowerCase();
-            } else if(type === 'title') {
+            saveHistoryState(); // Save before modification
+            if(type === 'upper') { textInput.value = textInput.value.toUpperCase(); } 
+            else if(type === 'lower') { textInput.value = textInput.value.toLowerCase(); } 
+            else if(type === 'title') {
                 textInput.value = textInput.value.toLowerCase().split(' ').map(word => {
                     return (word.charAt(0).toUpperCase() + word.slice(1));
                 }).join(' ');
             }
+            saveHistoryState(); // Save after modification
             analyzeText();
             localStorage.setItem('savedTextDE', textInput.value);
         }
