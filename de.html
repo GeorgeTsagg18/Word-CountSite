@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CharacterCap | Kostenloser Wörter- und Zeichenzähler</title>
 	<link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <meta name="description" content="Nutzen Sie CharacterCap, um sofort Wörter, Zeichen und Lesezeit zu zählen sowie die Keyword-Dichte zu prüfen. Kostenlos für Autoren und SEO-Experten.">
+    <meta name="description" content="Nutzen Sie CharacterCap, um sofort Wörter, Zeichen, Lesbarkeit und Lesezeit zu prüfen sowie die Keyword-Dichte zu analysieren.">
     <!-- Schema Markup for SEO -->
     <script type="application/ld+json">
     {
@@ -13,7 +13,7 @@
       "@type": "WebApplication",
       "name": "CharacterCap",
       "url": "https://charactercap.com/de.html",
-      "description": "Kostenloser Online-Wörterzähler, Zeichenlimit-Prüfer für Social Media und Textbereinigungs-Tool.",
+      "description": "Kostenloser Online-Wörterzähler, Lesbarkeits-Prüfer, Zeichenlimit-Checker für Social Media und Textbereinigungs-Tool.",
       "applicationCategory": "UtilityApplication",
       "operatingSystem": "Any",
       "offers": {
@@ -21,7 +21,7 @@
         "price": "0",
         "priceCurrency": "EUR"
       },
-      "featureList": "Wörterzähler, Zeichenzähler, Social Media Limits, Textbereinigung, Zen Mode, Vorlesefunktion"
+      "featureList": "Wörterzähler, Zeichenzähler, Lesbarkeitsindex, Social Media Limits, Textbereinigung, Zen Mode, Vorlesefunktion"
     }
     </script>
 	
@@ -175,6 +175,22 @@
             <!-- Right Column: Details (Sticky feature) -->
             <div id="rightColumn" class="w-full lg:w-1/4 flex flex-col gap-6 transition-all duration-300 lg:sticky lg:top-24 lg:self-start">
                 
+                <!-- Lesbarkeits-Kärtchen -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                    <div class="flex justify-between items-center mb-4 border-b border-slate-100 dark:border-slate-700 pb-2">
+                        <h3 class="font-semibold text-slate-800 dark:text-slate-200">Lesbarkeit</h3>
+                        <span id="readabilityBadge" class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300">N/A</span>
+                    </div>
+                    <div class="flex items-baseline justify-between mb-2">
+                        <span class="text-3xl font-bold text-slate-800 dark:text-slate-100" id="readabilityScore">--</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400" id="readabilityLevel">Mehr Text nötig</span>
+                    </div>
+                    <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2 mt-2">
+                        <div id="readabilityBar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-2">Flesch-Reading-Ease-Index (0–100)</p>
+                </div>
+
                 <!-- Time Estimates -->
                 <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
                     <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-700 pb-2">Zeitschätzungen</h3>
@@ -270,41 +286,37 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-slate-600 dark:text-slate-400 leading-relaxed space-y-8">
             
             <h2 class="text-3xl font-bold text-slate-800 dark:text-slate-200 mb-4">Der ultimative kostenlose Wörterzähler & Texteditor</h2>
-            <p>Egal, ob Sie als Student einen akademischen Aufsatz schreiben, als SEO-Experte einen Blogbeitrag optimieren oder als Social-Media-Manager Kampagnen entwerfen – die genaue Textlänge zu kennen, ist entscheidend. CharacterCap ist mehr als nur ein standardmäßiger <strong>Online-Wörterzähler</strong>. Es ist ein umfassendes Text-Werkzeug, das Ihnen hilft, Wörter zu zählen, Zeichenlimits zu überwachen und Ihren Text nahtlos zu formatieren, ohne Ihren Browser verlassen zu müssen. Da alles lokal verarbeitet wird, bleiben Ihre Daten zu 100 % sicher und privat.</p>
+            <p>Egal, ob Sie als Student einen akademischen Aufsatz schreiben, als SEO-Experte einen Blogbeitrag optimieren oder als Social-Media-Manager Kampagnen entwerfen – die genaue Textlänge und Lesbarkeit zu kennen, ist entscheidend. CharacterCap ist mehr als nur ein standardmäßiger <strong>Online-Wörterzähler</strong>. Es ist ein umfassendes Text-Werkzeug, das Ihnen hilft, Wörter zu zählen, den Lesbarkeitsindex zu messen, Zeichenlimits zu überwachen und Ihren Text nahtlos zu formatieren.</p>
             
             <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 mt-10 mb-4">Leitfaden für Social-Media-Zeichenlimits 2026</h2>
             <p>Social-Media-Plattformen haben strenge Richtlinien. Eine abgeschnittene Nachricht zu posten, kann das Engagement und Ihr professionelles Image beeinträchtigen. Unser integrierter <strong>Social-Media-Zeichenzähler</strong> bietet Live-Fortschrittsbalken für die beliebtesten Plattformen im Jahr 2026:</p>
             <ul class="list-disc pl-6 space-y-3 mt-4">
-                <li><strong>X (ehemals Twitter):</strong> Das Standardlimit bleibt bei 280 Zeichen für reguläre Nutzer. Unser Live-Tracker stellt sicher, dass Sie keine Zeit mit dem Schreiben eines Tweets verschwenden, der abgeschnitten wird.</li>
-                <li><strong>LinkedIn:</strong> Die Plattform erlaubt bis zu 3.000 Zeichen für organische Beiträge. Da LinkedIn für professionelles Storytelling konzipiert ist, hilft Ihnen ein Zeichenzähler, Ihre Inhalte optimal zu nutzen.</li>
-                <li><strong>Instagram:</strong> Bildunterschriften können bis zu 2.200 Zeichen lang sein. Da Instagram Bildunterschriften jedoch nach 125 Zeichen im Feed einklappt, hilft Ihnen unser Tool, Ihren "Hook" sorgfältig zu planen und gleichzeitig die Gesamtlänge im Auge zu behalten.</li>
-                <li><strong>TikTok:</strong> Die Videoplattform erlaubt bis zu 2.200 Zeichen für Beschreibungen und bietet Creatorn viel Raum für SEO-Keywords und Hashtags.</li>
+                <li><strong>X (ehemals Twitter):</strong> Das Standardlimit bleibt bei 280 Zeichen für reguläre Nutzer.</li>
+                <li><strong>LinkedIn:</strong> Die Plattform erlaubt bis zu 3.000 Zeichen für organische Beiträge.</li>
+                <li><strong>Instagram:</strong> Bildunterschriften können bis zu 2.200 Zeichen lang sein.</li>
+                <li><strong>TikTok:</strong> Die Videoplattform erlaubt bis zu 2.200 Zeichen für Beschreibungen.</li>
             </ul>
 
-            <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 mt-10 mb-4">Optimieren Sie Ihre Inhalte mit der Keyword-Dichte-Analyse</h2>
-            <p>Das Schreiben für das Web bedeutet, ein Gleichgewicht zwischen Lesbarkeit und SEO zu finden. Wenn Sie zu viele Keywords verwenden, könnten Suchmaschinen Ihre Seite abstrafen. Wenn Sie zu wenige verwenden, ranken Sie möglicherweise überhaupt nicht. Unser integrierter <strong>Keyword-Dichte-Prüfer</strong> analysiert Ihren Text in Echtzeit. Er filtert gängige Stoppwörter (wie "und", "die", "ist") heraus und hebt die 5 am häufigsten verwendeten Begriffe hervor. So können Texter genau sehen, welche Themen in ihrem Text dominieren.</p>
+            <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 mt-10 mb-4">Optimieren Sie Ihre Inhalte mit Lesbarkeits- & Keyword-Dichte-Analyse</h2>
+            <p>Unser integrierter <strong>Flesch-Reading-Ease-Rechner</strong> (Amstad-Formel für Deutsch) hilft Ihnen, den Text perfekt an Ihr Zielpublikum anzupassen. Ein Wert zwischen 60 und 70 gilt als ideal verständlich für Web-Inhalte.</p>
 
             <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 mt-10 mb-4">Unordentlichen Text mit einem Klick bereinigen</h2>
-            <p>Wir alle kennen das: Sie kopieren einen Absatz aus einem PDF-Dokument oder einer schlecht formatierten Website, und der resultierende Text ist voller fehlerhafter Zeilenumbrüche und doppelter Leerzeichen. Anstatt sie manuell zu beheben, bietet CharacterCap eine Textbereinigung mit nur einem Klick. Nutzen Sie die Buttons <strong>"Leerzeichen entfernen"</strong> und <strong>"Umbrüche entfernen"</strong>, um Ihr Dokument sofort in saubere, lesbare Absätze zu formatieren.</p>
+            <p>Nutzen Sie die Buttons <strong>"Leerzeichen entfernen"</strong> und <strong>"Umbrüche entfernen"</strong>, um Ihr Dokument sofort in saubere, lesbare Absätze zu formatieren.</p>
 
             <h2 id="faq" class="text-3xl font-bold text-slate-800 dark:text-slate-200 pt-10 border-t border-slate-200 dark:border-slate-800 mt-10">Häufig gestellte Fragen (FAQ)</h2>
             
             <div class="space-y-6 mt-6">
                 <div>
                     <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Wie zähle ich Wörter in einem Text?</h4>
-                    <p class="mt-2">Geben Sie Ihren Text einfach in den Haupteditor ein oder fügen Sie ihn ein. Das Tool berechnet automatisch die Gesamtzahl der Wörter, Zeichen, Sätze und Absätze in Echtzeit.</p>
+                    <p class="mt-2">Geben Sie Ihren Text einfach in den Haupteditor ein oder fügen Sie ihn ein. Das Tool berechnet automatisch alle Werte in Echtzeit.</p>
                 </div>
                 <div>
-                    <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Ist dieser Zeichenzähler völlig kostenlos?</h4>
-                    <p class="mt-2">Ja! CharacterCap ist ein 100 % kostenloses Werkzeug. Es gibt keine Premium-Pläne, keine versteckten Gebühren und es ist keine Registrierung erforderlich.</p>
+                    <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Was ist der Lesbarkeitsindex (Flesch-Index)?</h4>
+                    <p class="mt-2">Der Index bewertet die Verständlichkeit eines Textes auf einer Skala von 0 bis 100. Höhere Werte bedeuten leichtere Lesbarkeit.</p>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Speichert das Tool meine Arbeit?</h4>
-                    <p class="mt-2">Ja, wir verwenden den lokalen Speicher Ihres Browsers, um Ihren Text automatisch zu speichern. Wenn Sie den Tab versehentlich schließen, wartet Ihr Text bei Ihrer Rückkehr auf Sie. Wir laden Ihre Daten jedoch niemals auf externe Server hoch.</p>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Was ist der Zen-Modus?</h4>
-                    <p class="mt-2">Schreiben erfordert Fokus. Der Zen-Modus bietet eine völlig ablenkungsfreie Umgebung, indem er alle Menüs, Seitenleisten und Statistiken ausblendet und nur Ihren Text auf dem Bildschirm belässt.</p>
+                    <p class="mt-2">Ja, der Text wird automatisch lokal in Ihrem Browser gespeichert. Es erfolgt kein Upload auf externe Server.</p>
                 </div>
             </div>
 
@@ -500,6 +512,68 @@
             localStorage.setItem('savedTextDE', textInput.value);
         }
 
+        // --- Syllable Counter & Readability (German - Flesch-Amstad) ---
+        function countGermanSyllables(word) {
+            word = word.toLowerCase().replace(/[^a-zäöüß]/g, '');
+            if (word.length <= 3) return 1;
+            const syllables = word.match(/[aeiouyäöü]{1,2}/g);
+            return syllables ? Math.max(1, syllables.length) : 1;
+        }
+
+        function updateReadability(words, numSentences) {
+            const scoreEl = document.getElementById('readabilityScore');
+            const levelEl = document.getElementById('readabilityLevel');
+            const badgeEl = document.getElementById('readabilityBadge');
+            const barEl = document.getElementById('readabilityBar');
+
+            if (words.length < 5 || numSentences < 1) {
+                scoreEl.innerText = '--';
+                levelEl.innerText = 'Mehr Text nötig';
+                badgeEl.innerText = 'N/A';
+                badgeEl.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
+                barEl.style.width = '0%';
+                barEl.className = 'bg-blue-600 h-2 rounded-full transition-all duration-300';
+                return;
+            }
+
+            let totalSyllables = 0;
+            words.forEach(w => totalSyllables += countGermanSyllables(w));
+
+            // Flesch-Amstad Formula for German
+            const rawScore = 180 - (words.length / numSentences) - (58.5 * (totalSyllables / words.length));
+            const score = Math.max(0, Math.min(100, Math.round(rawScore)));
+
+            scoreEl.innerText = score;
+            barEl.style.width = score + '%';
+
+            if (score >= 80) {
+                levelEl.innerText = 'Sehr leicht (Grundschule)';
+                badgeEl.innerText = 'Sehr leicht';
+                badgeEl.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300';
+                barEl.className = 'bg-emerald-500 h-2 rounded-full transition-all duration-300';
+            } else if (score >= 65) {
+                levelEl.innerText = 'Leicht verständlich';
+                badgeEl.innerText = 'Leicht';
+                badgeEl.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300';
+                barEl.className = 'bg-teal-500 h-2 rounded-full transition-all duration-300';
+            } else if (score >= 50) {
+                levelEl.innerText = 'Normal (Mittelstufe)';
+                badgeEl.innerText = 'Standard';
+                badgeEl.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300';
+                barEl.className = 'bg-blue-600 h-2 rounded-full transition-all duration-300';
+            } else if (score >= 35) {
+                levelEl.innerText = 'Mittelschwer (Gymnasium)';
+                badgeEl.innerText = 'Mittelschwer';
+                badgeEl.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300';
+                barEl.className = 'bg-amber-500 h-2 rounded-full transition-all duration-300';
+            } else {
+                levelEl.innerText = 'Schwer (Fachliteratur/Uni)';
+                badgeEl.innerText = 'Schwer';
+                badgeEl.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300';
+                barEl.className = 'bg-rose-500 h-2 rounded-full transition-all duration-300';
+            }
+        }
+
         function analyzeText() {
             const text = textInput.value;
             const textTrimmed = text.trim();
@@ -513,6 +587,7 @@
                 document.getElementById('sentenceCount').innerText = '0';
                 document.getElementById('paragraphCount').innerText = '0';
                 document.getElementById('keywordList').innerHTML = '<li class="text-slate-500 dark:text-slate-400 italic">Tippen Sie, um die Dichte zu sehen...</li>';
+                updateReadability([], 0);
                 return;
             }
 
@@ -531,6 +606,7 @@
             document.getElementById('readTime').innerText = `${rTime} Min`;
             document.getElementById('speakTime').innerText = `${sTime} Min`;
 
+            updateReadability(words, Math.max(1, sentences.length));
             calculateKeywordDensity(words, numWords);
         }
 

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CharacterCap | Pro Writing Tool & Word Counter</title>
 	<link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <meta name="description" content="Use CharacterCap to count words, optimize for social media limits, and write distraction-free with Focus Mode.">
+    <meta name="description" content="Use CharacterCap to count words, check readability score, optimize for social media limits, and write distraction-free.">
     <!-- Schema Markup for SEO -->
     <script type="application/ld+json">
     {
@@ -13,7 +13,7 @@
       "@type": "WebApplication",
       "name": "CharacterCap",
       "url": "https://charactercap.com/",
-      "description": "A free professional online word counter, social media character limit checker, and text editing utility.",
+      "description": "A free professional online word counter, readability score checker, social media character limit tool, and text editing utility.",
       "applicationCategory": "UtilityApplication",
       "operatingSystem": "Any",
       "offers": {
@@ -21,7 +21,7 @@
         "price": "0",
         "priceCurrency": "USD"
       },
-      "featureList": "Word counter, Character counter, Social media limits, Text cleaner, Zen mode, Text to Speech"
+      "featureList": "Word counter, Character counter, Readability score, Social media limits, Text cleaner, Zen mode, Text to Speech"
     }
     </script>
 	
@@ -212,6 +212,22 @@
             <!-- Right Column: Details (Sticky feature) -->
             <div id="rightColumn" class="w-full lg:w-1/4 flex flex-col gap-6 transition-all duration-300 lg:sticky lg:top-24 lg:self-start">
                 
+                <!-- Readability Card -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                    <div class="flex justify-between items-center mb-4 border-b border-slate-100 dark:border-slate-700 pb-2">
+                        <h3 class="font-semibold text-slate-800 dark:text-slate-200">Readability</h3>
+                        <span id="readabilityBadge" class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300">N/A</span>
+                    </div>
+                    <div class="flex items-baseline justify-between mb-2">
+                        <span class="text-3xl font-bold text-slate-800 dark:text-slate-100" id="readabilityScore">--</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400" id="readabilityLevel">Needs more text</span>
+                    </div>
+                    <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2 mt-2">
+                        <div id="readabilityBar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-2">Flesch Reading Ease (0–100)</p>
+                </div>
+
                 <!-- Social Media Limits -->
                 <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
                     <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-700 pb-2">Social Limits</h3>
@@ -299,7 +315,7 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-slate-600 dark:text-slate-400 leading-relaxed space-y-8">
             
             <h2 class="text-3xl font-bold text-slate-800 dark:text-slate-200 mb-4">The Ultimate Free Word Counter & Text Utility</h2>
-            <p>Whether you are a student writing an academic essay, an SEO professional optimizing a blog post, or a social media manager drafting campaigns, knowing your exact text length is crucial. CharacterCap is more than just a standard <strong>word counter online</strong>. It is a comprehensive text utility designed to help you count words, track character limits, and format your writing seamlessly without leaving your browser. Because it processes everything locally, your data remains 100% secure and private.</p>
+            <p>Whether you are a student writing an academic essay, an SEO professional optimizing a blog post, or a social media manager drafting campaigns, knowing your exact text length is crucial. CharacterCap is more than just a standard <strong>word counter online</strong>. It is a comprehensive text utility designed to help you count words, check readability scores, track character limits, and format your writing seamlessly without leaving your browser. Because it processes everything locally, your data remains 100% secure and private.</p>
             
             <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 mt-10 mb-4">2026 Social Media Character Limits Guide</h2>
             <p>Social media platforms have strict guidelines. Posting a truncated message can ruin your engagement and professional image. Our built-in <strong>social media character counter</strong> features live progress bars for the most popular platforms in 2026:</p>
@@ -310,8 +326,8 @@
                 <li><strong>TikTok:</strong> The video platform allows up to 2,200 characters for descriptions, giving creators ample room for SEO keywords and hashtags.</li>
             </ul>
 
-            <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 mt-10 mb-4">Optimize Your Content with Keyword Density Analysis</h2>
-            <p>Writing for the web means balancing readability with SEO. If you overstuff keywords, search engines might penalize your page. If you use too few, you might not rank at all. Our built-in <strong>keyword density checker</strong> analyzes your text in real-time. It filters out common stop words (like "the", "and", "is") and highlights the top 5 most frequently used terms. This allows copywriters and content marketers to see exactly which topics dominate their text, ensuring optimal alignment with target search queries.</p>
+            <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 mt-10 mb-4">Optimize Your Content with Readability & Keyword Density Analysis</h2>
+            <p>Writing for the web means balancing readability with SEO. Our real-time <strong>Flesch Reading Ease score calculator</strong> ensures that your writing matches your target audience's reading level. A score between 60 and 70 is ideal for web content. Combined with our built-in <strong>keyword density checker</strong>, you can avoid keyword stuffing and produce clear, engaging copy that ranks well on Google.</p>
 
             <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 mt-10 mb-4">Clean Up Messy Text in One Click</h2>
             <p>We have all been there: you copy a paragraph from a PDF document or a badly formatted website, and the resulting text is full of awkward line breaks and double spaces. Instead of fixing them manually, CharacterCap offers a one-click text cleaner. Use the <strong>"Remove Extra Spaces"</strong> and <strong>"Remove Line Breaks"</strong> buttons to instantly format your document into clean, readable paragraphs.</p>
@@ -324,16 +340,16 @@
                     <p class="mt-2">Simply type or paste your text into the main editor area. The tool will automatically calculate the total number of words, characters, sentences, and paragraphs in real-time.</p>
                 </div>
                 <div>
-                    <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Is this character counter completely free?</h4>
-                    <p class="mt-2">Yes! CharacterCap is a 100% free utility tool. There are no premium plans, no hidden fees, and no account registrations required.</p>
+                    <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">What is the Flesch Reading Ease score?</h4>
+                    <p class="mt-2">The Flesch Reading Ease test measures the readability of a text on a scale from 0 to 100. Higher scores indicate material that is easier to read, with 60–70 considered the standard target for web copy.</p>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">Does the tool save my work?</h4>
-                    <p class="mt-2">Yes, we use your browser's local storage to auto-save your text. If you accidentally close the tab, your text will be waiting for you when you return. However, we never upload your data to any external servers.</p>
+                    <p class="mt-2">Yes, we use your browser's local storage to auto-save your text. If you accidentally close the tab, your text will be waiting for you when you return. We never upload your data to any external servers.</p>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold text-slate-800 dark:text-slate-200">What is Zen Mode?</h4>
-                    <p class="mt-2">Writing requires focus. Zen Mode provides a completely distraction-free environment by hiding all menus, sidebars, and metrics, leaving only your text on the screen. It is perfect for getting your initial thoughts down before you start editing.</p>
+                    <p class="mt-2">Writing requires focus. Zen Mode provides a completely distraction-free environment by hiding all menus, sidebars, and metrics, leaving only your text on the screen.</p>
                 </div>
             </div>
 
@@ -529,6 +545,75 @@
             localStorage.setItem('savedText', textInput.value);
         }
 
+        // --- Syllable Counter & Readability ---
+        function countEnglishSyllables(word) {
+            word = word.toLowerCase().replace(/[^a-z]/g, '');
+            if (word.length <= 3) return 1;
+            word = word.replace(/(?:[^laeiouy]|ed|es|e)$/, '');
+            word = word.replace(/^y/, '');
+            const syllables = word.match(/[aeiouy]{1,2}/g);
+            return syllables ? Math.max(1, syllables.length) : 1;
+        }
+
+        function updateReadability(words, numSentences) {
+            const scoreEl = document.getElementById('readabilityScore');
+            const levelEl = document.getElementById('readabilityLevel');
+            const badgeEl = document.getElementById('readabilityBadge');
+            const barEl = document.getElementById('readabilityBar');
+
+            if (words.length < 5 || numSentences < 1) {
+                scoreEl.innerText = '--';
+                levelEl.innerText = 'Needs more text';
+                badgeEl.innerText = 'N/A';
+                badgeEl.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
+                barEl.style.width = '0%';
+                barEl.className = 'bg-blue-600 h-2 rounded-full transition-all duration-300';
+                return;
+            }
+
+            let totalSyllables = 0;
+            words.forEach(w => totalSyllables += countEnglishSyllables(w));
+
+            // Flesch Reading Ease Formula (English)
+            const rawScore = 206.835 - (1.015 * (words.length / numSentences)) - (84.6 * (totalSyllables / words.length));
+            const score = Math.max(0, Math.min(100, Math.round(rawScore)));
+
+            scoreEl.innerText = score;
+            barEl.style.width = score + '%';
+
+            if (score >= 90) {
+                levelEl.innerText = '5th Grade (Very Easy)';
+                badgeEl.innerText = 'Very Easy';
+                badgeEl.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300';
+                barEl.className = 'bg-emerald-500 h-2 rounded-full transition-all duration-300';
+            } else if (score >= 70) {
+                levelEl.innerText = '7th Grade (Easy)';
+                badgeEl.innerText = 'Easy';
+                badgeEl.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300';
+                barEl.className = 'bg-teal-500 h-2 rounded-full transition-all duration-300';
+            } else if (score >= 60) {
+                levelEl.innerText = '8th-9th Grade (Standard)';
+                badgeEl.innerText = 'Standard';
+                badgeEl.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300';
+                barEl.className = 'bg-blue-600 h-2 rounded-full transition-all duration-300';
+            } else if (score >= 50) {
+                levelEl.innerText = 'High School (Fairly Hard)';
+                badgeEl.innerText = 'Fairly Hard';
+                badgeEl.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300';
+                barEl.className = 'bg-amber-500 h-2 rounded-full transition-all duration-300';
+            } else if (score >= 30) {
+                levelEl.innerText = 'College (Difficult)';
+                badgeEl.innerText = 'Difficult';
+                badgeEl.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300';
+                barEl.className = 'bg-orange-500 h-2 rounded-full transition-all duration-300';
+            } else {
+                levelEl.innerText = 'Academic (Very Hard)';
+                badgeEl.innerText = 'Very Hard';
+                badgeEl.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300';
+                barEl.className = 'bg-rose-500 h-2 rounded-full transition-all duration-300';
+            }
+        }
+
         function analyzeText() {
             const text = textInput.value;
             const textTrimmed = text.trim();
@@ -542,6 +627,7 @@
                 document.getElementById('sentenceCount').innerText = '0';
                 document.getElementById('paragraphCount').innerText = '0';
                 document.getElementById('keywordList').innerHTML = '<li class="text-slate-500 dark:text-slate-400 italic">Start typing to see density...</li>';
+                updateReadability([], 0);
                 return;
             }
 
@@ -555,6 +641,7 @@
             const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0);
             document.getElementById('paragraphCount').innerText = paragraphs.length;
 
+            updateReadability(words, Math.max(1, sentences.length));
             calculateKeywordDensity(words, numWords);
         }
 
