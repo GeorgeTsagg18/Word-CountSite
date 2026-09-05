@@ -8,7 +8,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://charactercap.com/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://charactercap.com/de.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://charactercap.com/" />
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -19,15 +19,39 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://charactercap.com/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://charactercap.com/de.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://charactercap.com/" />
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+  </url>
+
+  <!-- Social Media Limits Guide -->
+  <url>
+    <loc>https://charactercap.com/social-media-limits-guide.html</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Readability Score Guide -->
+  <url>
+    <loc>https://charactercap.com/readability-score-guide.html</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Terms of Service -->
+  <url>
+    <loc>https://charactercap.com/terms.html</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 
   <!-- Privacy Policy -->
   <url>
     <loc>https://charactercap.com/privacy.html</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -35,7 +59,7 @@
   <!-- Contact Us -->
   <url>
     <loc>https://charactercap.com/contact.html</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
